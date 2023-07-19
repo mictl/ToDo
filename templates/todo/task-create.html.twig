@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} | Neue Aufgabe anlegen{% endblock %}
+
+{% block body %}
+
+    <div class="container">
+        <h1>Aufgabe anlegen</h1>
+        <div>
+            {{ form_start(taskForm) }}
+                {{ form_widget(taskForm) }}
+                <button type="submit" class="btn btn-primary">Speichern</button>
+            {{ form_end(taskForm) }}
+        </div>
+    </div>
+
+{% endblock %}

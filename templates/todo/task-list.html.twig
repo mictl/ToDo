@@ -1,0 +1,71 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} | Übersicht{% endblock %}
+
+{% block body %}
+
+    {% set selectedPriority = "Alle" %}
+    {% for priority in priorities %}
+        {% if priority.code == filter %}
+            {% set selectedPriority = priority.name %}
+        {% endif %}
+    {% endfor %}
+
+    <div class="container">
+        <h1>Auflisten: {{ selectedPriority }}</h1>
+        <h2 class="mt-5 mb-4">Filtern nach Dringlichkeit</h2>
+        <ul class="genre-list ps-0 mt-2 mb-3">
+            <li class="d-inline">
+                <a class="btn btn-warning btn-sm" href="{{ path('app_list') }}">Alle</a>
+            </li>
+            {% for priority in priorities %}
+            <li class="d-inline">
+                <a class="btn btn-warning btn-sm" href="{{ path('app_list', {
+                    slug: priority.code
+                }) }}">{{ priority.name }}</a>
+            </li>
+            {% endfor %}
+        </ul>
+        <div>
+            <h2 class="mt-5">Aufgaben</h2>
+            <div class="row">
+                {% for task in tasks %}
+                <div class="col col-12 col-xl-6">
+                    <div class="card text-white bg-secondary mb-3" >
+                        <div class="card-header row">
+                            <div class="col col-8">
+                                #{{ task.id }}  |  Projekt: {{ task.project }}
+                            </div>
+                            <div class="col col-4">
+                                <span class="badge bg-info text-black">{{ task.status }}</span>
+                                <span class="badge bg-warning text-black">{{ task.priority }}</span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <h4 class="card-title">{{ task.title }}</h4>
+                            <p class="card-text">{{ task.text }}</p>
+                        </div>
+                        <div class="card-body">
+                            <div class="card-header row">
+                                <div class="col col-8">
+                                    <a href="{{ path('app_edit_task', { id: task.id }) }}"
+                                       class="card-link btn btn-success">Bearbeiten</a>
+                                </div>
+                                <div class="col col-4">
+                                    <a href="{{ path('app_delete_task', { id: task.id }) }}"
+                                       class="card-link btn btn-danger">Löschen</a>
+                                </div>
+                            </div>
+                        </div>
+                        {% if task.parent %}
+                            <div class="card-footer text-muted bg-light">
+                                ACHTUNG! Dies ist eine Unteraufgabe von Aufgabe <b>#{{ task.parent.id }}: {{ task.parent }}</b>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
